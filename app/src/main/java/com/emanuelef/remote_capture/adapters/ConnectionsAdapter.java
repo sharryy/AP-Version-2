@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -104,6 +105,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             traffic.setText(Utils.formatBytes(conn.sent_bytes + conn.rcvd_bytes));
             lastSeen.setText(Utils.formatEpochShort(context, conn.last_seen));
             statusInd.setText(conn.getStatusLabel(context));
+
+            //TODO : 1
+            Toast.makeText(context, "Fuck You! Fuck You!", Toast.LENGTH_SHORT).show();
 
             if(conn.status < ConnectionDescriptor.CONN_STATUS_CLOSED)
                 statusInd.setTextColor(0xFF28BC36); // Open

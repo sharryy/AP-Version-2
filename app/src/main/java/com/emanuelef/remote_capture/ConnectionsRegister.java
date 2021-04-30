@@ -20,7 +20,9 @@
 package com.emanuelef.remote_capture;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.emanuelef.remote_capture.interfaces.ConnectionsListener;
 import com.emanuelef.remote_capture.model.AppDescriptor;
@@ -306,7 +308,6 @@ public class ConnectionsRegister {
                 builder.append(conn.last_seen);                             builder.append("\n");
             }
         }
-
         return builder.toString();
     }
 }
