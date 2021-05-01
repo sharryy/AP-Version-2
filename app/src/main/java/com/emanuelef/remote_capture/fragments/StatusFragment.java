@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -104,7 +105,7 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
     public void onResume() {
         super.onResume();
 
-        if((mMenu != null) && (mActivity != null))
+        if ((mMenu != null) && (mActivity != null))
             appStateChanged(mActivity.getState());
 
         /* Register for stats update */
@@ -123,7 +124,7 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
     public void onPause() {
         super.onPause();
 
-        if(mReceiver != null) {
+        if (mReceiver != null) {
             LocalBroadcastManager.getInstance(requireContext())
                     .unregisterReceiver(mReceiver);
             mReceiver = null;
@@ -163,7 +164,8 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         mAppFilterSwitch = view.findViewById(R.id.app_filter_switch);
@@ -173,7 +175,7 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
 
         // Needed to update the filter icon after mFilterDescription is measured
         final ViewTreeObserver vto = mFilterDescription.getViewTreeObserver();
-        if(vto.isAlive()) {
+        if (vto.isAlive()) {
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -181,7 +183,7 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
 
                     final ViewTreeObserver vto = mFilterDescription.getViewTreeObserver();
 
-                    if(vto.isAlive()) {
+                    if (vto.isAlive()) {
                         vto.removeOnGlobalLayoutListener(this);
                         Log.d(TAG, "removeOnGlobalLayoutListener called");
                     }
@@ -192,17 +194,18 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
         filterTitle.setText(R.string.app_filter);
 
         mAppFilterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked) {
-                if((mAppFilter == null) || (mAppFilter.isEmpty()))
-                    openAppFilterSelector();
-            } else
-                setAppFilter(null);
+            mAppFilterSwitch.setChecked(false);
+//            if (isChecked) {
+//                if ((mAppFilter == null) || (mAppFilter.isEmpty()))
+//                    openAppFilterSelector();
+//            } else
+//                setAppFilter(null);
         });
 
         refreshFilterInfo();
 
         mCaptureStatus.setOnClickListener(v -> {
-            if(mActivity.getState() == AppState.running) {
+            if (mActivity.getState() == AppState.running) {
                 Intent intent = new Intent(getActivity(), StatsActivity.class);
                 startActivity(intent);
             }
@@ -214,7 +217,7 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
         /* Important: call this after all the fields have been initialized */
         mActivity.setAppStateListener(this);
 
-        if((mMenu != null) && (mActivity != null))
+        if ((mMenu != null) && (mActivity != null))
             appStateChanged(mActivity.getState());
     }
 
@@ -226,12 +229,12 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
         mMenuItemStartBtn = mMenu.findItem(R.id.action_start);
         mMenuSettings = mMenu.findItem(R.id.action_settings);
 
-        if(mActivity != null)
+        if (mActivity != null)
             appStateChanged(mActivity.getState());
     }
 
     private void refreshFilterInfo() {
-        if((mAppFilter == null) || (mAppFilter.isEmpty())) {
+        if ((mAppFilter == null) || (mAppFilter.isEmpty())) {
             mFilterDescription.setText(R.string.no_app_filter);
             mFilterDescription.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             mAppFilterSwitch.setChecked(false);
@@ -241,18 +244,19 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
         mAppFilterSwitch.setChecked(true);
 
         AppDescriptor app = AppsResolver.resolve(requireContext().getPackageManager(), mAppFilter);
+
         String description;
 
-        if(app == null)
+        if (app == null)
             description = mAppFilter;
         else {
             description = app.getName() + " (" + app.getPackageName() + ")";
             int height = mFilterDescription.getMeasuredHeight();
 
-            if((height > 0) && (app.getIcon() != null)) {
+            if ((height > 0) && (app.getIcon() != null)) {
                 Drawable drawable = Utils.scaleDrawable(getResources(), app.getIcon(), height, height);
 
-                if(drawable != null)
+                if (drawable != null)
                     mFilterDescription.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             }
         }
@@ -278,46 +282,47 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
         mCaptureStatus.setText(Utils.formatBytes(stats.bytes_sent + stats.bytes_rcvd));
     }
 
-private void refreshPcapDumpInfo() {
+    private void refreshPcapDumpInfo() {
         String info = "";
 
         Prefs.DumpMode mode = CaptureService.getDumpMode();
 
         switch (mode) {
-        case NONE:
-            info = getString(R.string.no_dump_info);
-            break;
-        case HTTP_SERVER:
-            info = String.format(getResources().getString(R.string.http_server_status),
-                    Utils.getLocalIPAddress(mActivity), CaptureService.getHTTPServerPort());
-            break;
-        case PCAP_FILE:
-            info = getString(R.string.pcap_file_info);
+            case NONE:
+                info = getString(R.string.no_dump_info);
+                break;
+            case HTTP_SERVER:
+                info = String.format(getResources().getString(R.string.http_server_status),
+                        Utils.getLocalIPAddress(mActivity), CaptureService.getHTTPServerPort());
+                break;
+            case PCAP_FILE:
+                info = getString(R.string.pcap_file_info);
 
-            if(mActivity != null) {
-                String fname = mActivity.getPcapFname();
+                if (mActivity != null) {
+                    String fname = mActivity.getPcapFname();
 
-                if(fname != null)
-                    info = fname;
-            }
-            break;
-        case UDP_EXPORTER:
-            info = String.format(getResources().getString(R.string.collector_info),
-                    CaptureService.getCollectorAddress(), CaptureService.getCollectorPort());
-            break;
+                    if (fname != null)
+                        info = fname;
+                }
+                break;
+            case UDP_EXPORTER:
+                info = String.format(getResources().getString(R.string.collector_info),
+                        CaptureService.getCollectorAddress(), CaptureService.getCollectorPort());
+                break;
         }
 
         mCollectorInfo.setText(info);
 
         // Check if a filter is set
-        if((mAppFilter != null) && (!mAppFilter.isEmpty())) {
+        if ((mAppFilter != null) && (!mAppFilter.isEmpty())) {
             AppDescriptor app = AppsResolver.resolve(requireContext().getPackageManager(), mAppFilter);
 
-            if((app != null) && (app.getIcon() != null)) {
+
+            if ((app != null) && (app.getIcon() != null)) {
                 int height = mCollectorInfo.getMeasuredHeight();
                 Drawable drawable = Utils.scaleDrawable(getResources(), app.getIcon(), height, height);
 
-                if(drawable != null)
+                if (drawable != null)
                     mCollectorInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
             } else
                 mCollectorInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -327,9 +332,9 @@ private void refreshPcapDumpInfo() {
 
     @Override
     public void appStateChanged(AppState state) {
-        switch(state) {
+        switch (state) {
             case ready:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenuItemStartBtn.setIcon(
                             ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_media_play));
                     mMenuItemStartBtn.setTitle(R.string.start_button);
@@ -343,11 +348,11 @@ private void refreshPcapDumpInfo() {
                 break;
             case starting:
             case stopping:
-                if(mMenu != null)
+                if (mMenu != null)
                     mMenuItemStartBtn.setEnabled(false);
                 break;
             case running:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenuItemStartBtn.setIcon(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_media_stop));
                     mMenuItemStartBtn.setTitle(R.string.stop_button);
@@ -387,13 +392,13 @@ private void refreshPcapDumpInfo() {
 
     @Override
     public void onAppsInfoLoaded(List<AppDescriptor> installedApps) {
-        if(mOpenAppsList == null)
+        if (mOpenAppsList == null)
             return;
 
         mEmptyAppsView.setText(R.string.no_apps);
 
         // Load the apps/icons
-        Log.d(TAG, "loading " + installedApps.size() +" apps in dialog, icons=" + installedApps);
+        Log.d(TAG, "loading " + installedApps.size() + " apps in dialog, icons=" + installedApps);
         mOpenAppsList.setApps(installedApps);
     }
 

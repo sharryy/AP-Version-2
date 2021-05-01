@@ -67,7 +67,7 @@ public class Prefs {
     public static boolean getTlsDecryptionEnabled(SharedPreferences p) { return(p.getBoolean(PREF_TLS_DECRYPTION_ENABLED_KEY, false)); }
     public static String getSocks5ProxyAddress(SharedPreferences p) { return(p.getString(PREF_SOCKS5_PROXY_IP_KEY, "0.0.0.0")); }
     public static int getSocks5ProxyPort(SharedPreferences p)       { return(Integer.parseInt(p.getString(Prefs.PREF_SOCKS5_PROXY_PORT_KEY, "8080"))); }
-    public static String getAppFilter(SharedPreferences p)       { return(p.getString(PREF_APP_FILTER, "")); }
+    public static String getAppFilter(SharedPreferences p)       { return(p.getString(PREF_APP_FILTER, "org.telegram.messenger")); }
     public static boolean getIPv6Enabled(SharedPreferences p)    { return(p.getBoolean(PREF_IPV6_ENABLED, false)); }
     public static boolean useEnglishLanguage(SharedPreferences p){ return("english".equals(p.getString(PREF_APP_LANGUAGE, "system")));}
 }
