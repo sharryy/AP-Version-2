@@ -102,7 +102,18 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             l7proto.setText(l7Text);
 
             String info_txt = (app != null) ? app.getName() : Integer.toString(conn.uid);
-            appName.setText(info_txt);
+
+            if(conn.sent_pkts > 4 && conn.rcvd_pkts > 4){
+                appName.setText("Data Transmission Detected");
+            }else if(conn.sent_pkts == 4 && conn.rcvd_pkts == 3){
+                appName.setText("Maintaining Connection.");
+            }else if(conn.sent_pkts == 2 && conn.rcvd_pkts == 2){
+                appName.setText("1st Connected to Server.");
+            }else if(conn.sent_pkts == 4 && conn.rcvd_pkts == 4){
+                appName.setText("Connection Closed.");
+            }
+
+//            appName.setText(info_txt);
             traffic.setText(Utils.formatBytes(conn.sent_bytes + conn.rcvd_bytes));
             lastSeen.setText(Utils.formatEpochShort(context, conn.last_seen));
             statusInd.setText(conn.getStatusLabel(context));
