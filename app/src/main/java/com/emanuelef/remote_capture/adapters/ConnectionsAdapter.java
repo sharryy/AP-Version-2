@@ -21,6 +21,7 @@ package com.emanuelef.remote_capture.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,17 +86,17 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             appIcon = ((app != null) && (app.getIcon() != null)) ? Objects.requireNonNull(app.getIcon().getConstantState()).newDrawable() : unknownIcon;
             icon.setImageDrawable(appIcon);
 
-            if(conn.info.length() > 0)
+            if (conn.info.length() > 0)
                 remote.setText(conn.info);
             else
                 remote.setText(conn.dst_ip);
 
-            if(conn.dst_port != 0)
+            if (conn.dst_port != 0)
                 l7Text = String.format(mProtoAndPort, conn.l7proto, conn.dst_port);
             else
                 l7Text = conn.l7proto;
 
-            if(conn.ipver == 6)
+            if (conn.ipver == 6)
                 l7Text = l7Text + ", IPv6";
 
             l7proto.setText(l7Text);
@@ -106,12 +107,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             lastSeen.setText(Utils.formatEpochShort(context, conn.last_seen));
             statusInd.setText(conn.getStatusLabel(context));
 
-            //TODO : 1
-            Toast.makeText(context, "Fuck You! Fuck You!", Toast.LENGTH_SHORT).show();
-
-            if(conn.status < ConnectionDescriptor.CONN_STATUS_CLOSED)
+            if (conn.status < ConnectionDescriptor.CONN_STATUS_CLOSED)
                 statusInd.setTextColor(0xFF28BC36); // Open
-            else if((conn.status == ConnectionDescriptor.CONN_STATUS_CLOSED)
+            else if ((conn.status == ConnectionDescriptor.CONN_STATUS_CLOSED)
                     || (conn.status == ConnectionDescriptor.CONN_STATUS_RESET))
                 statusInd.setTextColor(0xFFAAAAAA);
             else
@@ -144,7 +142,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.connection_item, parent, false);
 
-        if(mListener != null)
+        if (mListener != null)
             view.setOnClickListener(mListener);
 
         return new ViewHolder(view);
@@ -154,8 +152,16 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ConnectionDescriptor conn = getItem(position);
 
-        if(conn == null)
+        if (conn == null)
             return;
+
+        AppsResolver resolver = new AppsResolver(mContext);
+        AppDescriptor app = resolver.get(conn.uid);
+
+//        Log.d(TAG, "\nonBindViewHolder: " + app.getName() + "\n");
+
+//        Log.d(TAG, "onBindViewHolder: " + "Destination IP : " + conn.dst_ip + "\tSource Port+" + conn.src_port + "\tDestination Port : " + conn.dst_port + "\tPackets Sent : " + conn.sent_pkts
+//                + "\tPackets Received: " + conn.rcvd_pkts+ "\tSent Bytes : " + conn.sent_bytes + "\tStatus: " + conn.status + "\tProtocol: " + conn.l7proto + "APpName : "+ conn.info);
 
         holder.bindConn(mContext, conn, mApps, mUnknownIcon);
     }
@@ -170,10 +176,10 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public ConnectionDescriptor getItem(int pos) {
         ConnectionsRegister reg = CaptureService.getConnsRegister();
 
-        if((pos < 0) || (pos >= getItemCount()) || (reg == null))
+        if ((pos < 0) || (pos >= getItemCount()) || (reg == null))
             return null;
 
-        if(mUidFilter == Utils.UID_NO_FILTER)
+        if (mUidFilter == Utils.UID_NO_FILTER)
             return reg.getConn(pos);
         else
             return reg.getUidConn(mUidFilter, pos);
