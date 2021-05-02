@@ -41,9 +41,6 @@
             android:launchMode="singleTop"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.ConnectionDetailsActivity"
-            android:parentActivityName=".activities.MainActivity"/>
-        <activity
             android:name=".activities.StatsActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".activities.MainActivity"/>

@@ -55,8 +55,6 @@ import com.emanuelef.remote_capture.model.AppDescriptor;
 import com.emanuelef.remote_capture.CaptureService;
 import com.emanuelef.remote_capture.model.AppState;
 import com.emanuelef.remote_capture.AppsResolver;
-import com.emanuelef.remote_capture.model.ConnectionDescriptor;
-import com.emanuelef.remote_capture.activities.ConnectionDetailsActivity;
 import com.emanuelef.remote_capture.adapters.ConnectionsAdapter;
 import com.emanuelef.remote_capture.ConnectionsRegister;
 import com.emanuelef.remote_capture.views.EmptyRecyclerView;
