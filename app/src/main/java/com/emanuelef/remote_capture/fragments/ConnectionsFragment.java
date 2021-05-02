@@ -425,7 +425,6 @@ public class ConnectionsFragment extends Fragment implements ConnectionsListener
         }
 
         Collections.sort(appsData);
-
         Utils.getAppSelectionDialog(requireActivity(), appsData, app -> setUidFilter(app.getUid())).show();
     }
 

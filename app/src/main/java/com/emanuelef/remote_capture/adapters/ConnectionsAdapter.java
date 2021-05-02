@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,8 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         TextView lastSeen;
         final String mProtoAndPort;
 
+        public LinearLayout linearLayout;
+
         ViewHolder(View itemView) {
             super(itemView);
 
@@ -73,6 +76,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             statusInd = itemView.findViewById(R.id.status_ind);
             appName = itemView.findViewById(R.id.app_name);
             lastSeen = itemView.findViewById(R.id.last_seen);
+            linearLayout = itemView.findViewById(R.id.connection_item_linear_layout);
 
             Context context = itemView.getContext();
             mProtoAndPort = context.getString(R.string.proto_and_port);
@@ -125,6 +129,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                 statusInd.setTextColor(0xFFAAAAAA);
             else
                 statusInd.setTextColor(0xFFF20015); // Error
+
         }
     }
 
@@ -151,11 +156,8 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.connection_item, parent, false);
-
-        if (mListener != null)
-            view.setOnClickListener(mListener);
-
+        View view;
+        view = mLayoutInflater.inflate(R.layout.connection_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -169,9 +171,26 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         AppsResolver resolver = new AppsResolver(mContext);
         AppDescriptor app = resolver.get(conn.uid);
 
-
-        if (app.getName().equals("WhatsApp") || app.getName().equals("Telegram"))
+        if (app.getName().equals("WhatsApp") || app.getName().equals("Telegram")) {
             holder.bindConn(mContext, conn, mApps, mUnknownIcon);
+            holder.icon.setVisibility(View.VISIBLE);
+            holder.statusInd.setVisibility(View.VISIBLE);
+            holder.remote.setVisibility(View.VISIBLE);
+            holder.l7proto.setVisibility(View.VISIBLE);
+            holder.traffic.setVisibility(View.VISIBLE);
+            holder.appName.setVisibility(View.VISIBLE);
+            holder.lastSeen.setVisibility(View.VISIBLE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        } else {
+            holder.icon.setVisibility(View.INVISIBLE);
+            holder.statusInd.setVisibility(View.INVISIBLE);
+            holder.remote.setVisibility(View.INVISIBLE);
+            holder.l7proto.setVisibility(View.INVISIBLE);
+            holder.traffic.setVisibility(View.INVISIBLE);
+            holder.appName.setVisibility(View.INVISIBLE);
+            holder.lastSeen.setVisibility(View.INVISIBLE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+        }
     }
 
     @Override
