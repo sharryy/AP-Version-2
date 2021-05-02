@@ -169,10 +169,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         AppsResolver resolver = new AppsResolver(mContext);
         AppDescriptor app = resolver.get(conn.uid);
 
-//        Log.d(TAG, "\nonBindViewHolder: " + app.getName() + "\n");
 
-//        Log.d(TAG, "onBindViewHolder: " + "Destination IP : " + conn.dst_ip + "\tSource Port+" + conn.src_port + "\tDestination Port : " + conn.dst_port + "\tPackets Sent : " + conn.sent_pkts
-//                + "\tPackets Received: " + conn.rcvd_pkts+ "\tSent Bytes : " + conn.sent_bytes + "\tStatus: " + conn.status + "\tProtocol: " + conn.l7proto + "APpName : "+ conn.info);
 
         holder.bindConn(mContext, conn, mApps, mUnknownIcon);
     }
