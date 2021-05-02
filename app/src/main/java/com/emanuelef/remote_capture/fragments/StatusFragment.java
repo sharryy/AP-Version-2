@@ -195,11 +195,11 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
 
         mAppFilterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             mAppFilterSwitch.setChecked(false);
-//            if (isChecked) {
-//                if ((mAppFilter == null) || (mAppFilter.isEmpty()))
-//                    openAppFilterSelector();
-//            } else
-//                setAppFilter(null);
+            if (isChecked) {
+                if ((mAppFilter == null) || (mAppFilter.isEmpty()))
+                    openAppFilterSelector();
+            } else
+                setAppFilter(null);
         });
 
         refreshFilterInfo();

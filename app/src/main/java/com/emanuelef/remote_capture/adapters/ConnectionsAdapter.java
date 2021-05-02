@@ -103,13 +103,13 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
             String info_txt = (app != null) ? app.getName() : Integer.toString(conn.uid);
 
-            if(conn.sent_pkts > 4 && conn.rcvd_pkts > 4){
+            if (conn.sent_pkts > 4 && conn.rcvd_pkts > 4) {
                 appName.setText("Data Transmission Detected");
-            }else if(conn.sent_pkts == 4 && conn.rcvd_pkts == 3){
+            } else if (conn.sent_pkts == 4 && conn.rcvd_pkts == 3) {
                 appName.setText("Maintaining Connection.");
-            }else if(conn.sent_pkts == 2 && conn.rcvd_pkts == 2){
+            } else if (conn.sent_pkts == 2 && conn.rcvd_pkts == 2) {
                 appName.setText("1st Connected to Server.");
-            }else if(conn.sent_pkts == 4 && conn.rcvd_pkts == 4){
+            } else if (conn.sent_pkts == 4 && conn.rcvd_pkts == 4) {
                 appName.setText("Connection Closed.");
             }
 
@@ -170,8 +170,8 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         AppDescriptor app = resolver.get(conn.uid);
 
 
-
-        holder.bindConn(mContext, conn, mApps, mUnknownIcon);
+        if (app.getName().equals("WhatsApp") || app.getName().equals("Telegram"))
+            holder.bindConn(mContext, conn, mApps, mUnknownIcon);
     }
 
     @Override
