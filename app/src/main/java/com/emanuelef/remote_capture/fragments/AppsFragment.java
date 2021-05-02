@@ -91,18 +91,6 @@ public class AppsFragment extends Fragment implements ConnectionsListener {
         mHandler = new Handler(Looper.getMainLooper());
         mRefreshApps = false;
 
-        mAdapter.setClickListener(v -> {
-            int pos = mRecyclerView.getChildLayoutPosition(v);
-            AppStats item = mAdapter.getItem(pos);
-
-            if(item != null) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra(MainActivity.UID_FILTER_EXTRA, item.getUid());
-
-                startActivity(intent);
-            }
-        });
-
         /* Register for service status */
         mReceiver = new BroadcastReceiver() {
             @Override

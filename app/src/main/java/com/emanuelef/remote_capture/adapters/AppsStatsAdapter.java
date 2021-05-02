@@ -131,10 +131,6 @@ public class AppsStatsAdapter extends RecyclerView.Adapter<AppsStatsAdapter.View
         return mStats.get(pos);
     }
 
-    public void setClickListener(View.OnClickListener listener) {
-        mListener = listener;
-    }
-
     public void setStats(List<AppStats> stats) {
         Collections.sort(stats, (o1, o2) -> {
             AppDescriptor a1 = mApps.get(o1.getUid());

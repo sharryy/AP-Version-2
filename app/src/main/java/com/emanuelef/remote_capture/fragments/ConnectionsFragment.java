@@ -164,27 +164,6 @@ public class ConnectionsFragment extends Fragment implements ConnectionsListener
                 layoutMan.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        mAdapter.setClickListener(v -> {
-            int pos = mRecyclerView.getChildLayoutPosition(v);
-            ConnectionDescriptor item = mAdapter.getItem(pos);
-
-            if(item != null) {
-                Intent intent = new Intent(requireContext(), ConnectionDetailsActivity.class);
-                AppDescriptor app = mApps.get(item.uid);
-                String app_name = null;
-
-                if(app != null)
-                    app_name = app.getName();
-
-                intent.putExtra(ConnectionDetailsActivity.CONN_EXTRA_KEY, item);
-
-                if(app_name != null)
-                    intent.putExtra(ConnectionDetailsActivity.APP_NAME_EXTRA_KEY, app_name);
-
-                startActivity(intent);
-            }
-        });
-
         autoScroll = true;
         showFabDown(false);
         mOldConnectionsText.setVisibility(View.GONE);
