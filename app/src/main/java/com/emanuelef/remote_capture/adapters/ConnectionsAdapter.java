@@ -180,6 +180,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             holder.traffic.setVisibility(View.VISIBLE);
             holder.appName.setVisibility(View.VISIBLE);
             holder.lastSeen.setVisibility(View.VISIBLE);
+            holder.linearLayout.setVisibility(View.VISIBLE);
             holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
             holder.icon.setVisibility(View.INVISIBLE);
@@ -189,6 +190,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             holder.traffic.setVisibility(View.INVISIBLE);
             holder.appName.setVisibility(View.INVISIBLE);
             holder.lastSeen.setVisibility(View.INVISIBLE);
+            holder.linearLayout.setVisibility(View.INVISIBLE);
             holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
         }
     }
