@@ -311,8 +311,6 @@ public class StatusFragment extends Fragment implements AppStateListener, AppsLo
                 break;
         }
 
-        mCollectorInfo.setText(info);
-
         // Check if a filter is set
         if ((mAppFilter != null) && (!mAppFilter.isEmpty())) {
             AppDescriptor app = AppsResolver.resolve(requireContext().getPackageManager(), mAppFilter);
