@@ -173,10 +173,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mDrawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         toggle.syncState();
+        toggle.setDrawerIndicatorEnabled(false);
 
         NavigationView navView = findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);
+        navView.setVisibility(View.INVISIBLE);
         View header = navView.getHeaderView(0);
 
         TextView appVer = header.findViewById(R.id.app_version);
