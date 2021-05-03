@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.VpnService;
 
@@ -147,8 +148,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         };
 
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mReceiver, new IntentFilter(CaptureService.ACTION_SERVICE_STATUS));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(CaptureService.ACTION_SERVICE_STATUS));
     }
 
     @Override
@@ -156,8 +156,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onDestroy();
 
         if(mReceiver != null)
-            LocalBroadcastManager.getInstance(this)
-                    .unregisterReceiver(mReceiver);
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -251,7 +250,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
 
         @Override
-        public int getItemCount() {  return TOTAL_COUNT;  }
+        public int getItemCount() {
+            return TOTAL_COUNT;
+        }
     }
 
     private void setupTabs() {

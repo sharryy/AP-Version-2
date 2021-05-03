@@ -356,7 +356,8 @@ public class CaptureService extends VpnService implements Runnable {
 
     private Notification getNotification() {
         String msg = String.format(getString(R.string.notification_msg),
-                Utils.formatBytes(last_bytes), Utils.formatNumber(this, last_connections));
+                Utils.formatBytes(last_bytes),
+                Utils.formatNumber(this, last_connections));
 
         mNotificationBuilder.setContentText(msg);
 
